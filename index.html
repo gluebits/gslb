@@ -2,149 +2,1262 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>Redacted!</title>
-  
-  <style>
-  body{
- font-family: "courier";
- abackground-color: #333;
- acolor: #999;
-}
-
-#glue {
- color: #cc33ff;
- text-shadow: 0 0 5px rgba(0,160,240,1);
-}
-#text{
-
-	text-align: center;
-	margin-top: 10%
-}
-#template{
-	background-color: #fff;
-	color: #000;
-	apadding-left: 5%;
-	apadding-right: 5%;
-	margin-left: 25%;
-	margin-right: 25%;
-	line-height: 150%;
-}
-button{
-	font-family: "courier";
-}
-input{font-family: "courier"};
-
-  </style>
-
-  
+  <title>grey sands lay between</title>
 </head>
 <body>
-	<div id="text">
- <h2>
-  Redacted!
- </h2>
-  <p>
-  	v1.07.1
-   <br>Generate some random redacted text.
-   <br>Enter a positive number to designate sentence length, <br>or make the number negative to specify number of sentences instead.
-   <br>Leave blank to randomize.
-   <br>Alternately, you insert text to redact everything except puntuation. Line breaks will be ignored.
-  </p>
-  <p>
-  	<input type="text" id="length" placeholder="randomize">
-   <button onclick="submit()">Redact</button>
-  </p>
- <p id="template">
+<h3 id ="every"></h3>
+ <h5 id ="maus"></h5>
+ <h3 id="pref"></h3>
+ <font face="courier" size="3" color="black">
+  <br><br><br><br><br><br><br>
+  <br>Version 1.1
+  <br>Made by the Gluebits Initiative
+  <br>With about 1222 lines of code in 2 weeks of initial development.
   
- </p>
- </div>
+  <br><br>Update Notes: (1.1)
+  <br>Added console
+  <br>Various bug fixes/improvements
+  <br>Most notably-
+  <br>-Fixed button names in first stage
+  <br>-Inventory bug at start of stage 3
+  <br>-Removed choices (:
+  
+  <br><br>Upcoming Features:
+  <br>Pictures
+  <br>Music
+  <br>Notes function
+<br><br><br><br><br><br><br><br><br>
+<input type="text" id="console"/>
+<button onclick="consoler()"></button>
+  
+
+  
+ <br>
+ </font>
+
  <script>
- 
-var output, input, sentence_length, period,sentence_quantity,rand_sent_length;
-var stand_dev=3;
+     //console
+var console;
+function consoler(){
+console = document.getElementById('console').value;
 
-function submit(){
- 	output ="";
-	period=". ";
-	input=document.getElementById('length').value;
-	sentence_length=input;
-	sentence_quantity=1;
-	rand_sent_length=1;
-	if(input>0){
-		rand_sent_length=0;
-		period="";
-	}else if(input<0){
-		input*=-1;
-		//sentence_length=Math.floor(Math.random(5)*10)+5;
-		sentence_quantity=input;
-	}else if(input.length>0){
-		sentence_quantity=0;
-		for(n=0;n<input.length;n++){
-			switch(input[n]){
-				case '.':
-				output+=".";
-				break;
+document.getElementById('pref').innerHTML = "<button onclick=\""+console+"()\">go</button>";
+}
+//initial variable declarations
+var inv = "<font face=\"courier\" size=\"3\" color=\"black\">your inventory is empty.</font>";
+var prog = "<font face=\"courier\" size=\"3\" color=\"black\">welcome to purgatory. ";
+var minimap = "";
+var locat = "nowhere";
+var s1_lever = false;
+var s1_5lock = false;
+var s1_move = false;
+var s1_fig = false;
+var s2_power = false;
+var s2_l2l = false;
+var s2_l3l = false;
+var s2_ec = "<button onclick=\"s2_fec()\">current item</button> ";
+var s2_ef = "<button onclick=\"s2_fef()\">current item</button> ";
+var s2_ei = "<button onclick=\"s2_fei()\">current item</button> ";
+var s2_ea = "<button onclick=\"s2_fea()\">current item</button> ";
+var s2_eprog = 0;
+var s2_4plant = false;
+var s2_4p = "";
 
-				case '?':
-				output+='?';
-				break;
+//preferences bar
+    //started with start of stage1
 
-				case '!':
-				output+='!';
-				break;
-
-				case ',':
-				output+=',';
-				break;
-
-				case ':':
-				output+=':';
-				break;
-
-				case ' ':
-				output+=" ";
-				break;
-
-				default:
-				output+="&#x2588;";
-			}
-		}
-	}else{
-		//sentence_length=Math.floor(Math.random()*10)+5;
-		sentence_quantity=Math.floor(Math.random()*5)+1;
-	}
-
-	for(m=0;m<sentence_quantity;m++){
-		if(rand_sent_length){
-			sentence_length=Math.floor(Math.random()*10)+5;
-		}
-		for(i=0; i<sentence_length;i++){
-			var word_length=Math.floor(gaussianRand()*8)+1;
-			for(j=0;j<word_length;j++){
-				output+="&#x2588;"
-			}
-			output+=" ";
-		}
-		output=output.substring(0, output.length-1);
-		output+=period;
-	}
- document.getElementById('template').innerHTML=output;
+function prefdef(){
+document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">preferences</button>";
 }
 
-//copy/pasted from stack overflow- 
-//creates a random number with a normal, not uniform, distribution
-//increase stand_dev to sharpen the curve
-function gaussianRand() {
-  var rand = 0;
-
-  for (var i = 0; i < stand_dev; i += 1) {
-    rand += Math.random();
-  }
-
-  return rand / stand_dev;
+function prefbar()
+{document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
 }
 
+function inventory()
+{document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+}
+
+function status()
+{document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button><button onclick=\"page1\">page one</button><button onclick=\"page2\">page two</button><button onclick=\"page3\">page three</button><button onclick=\"page4\">page four</button>";
+}
+
+function page1()
+{currentpage=p1s1;}
+
+function map()
+{document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button>" + "<br>your location: <font face=\"courier\" size=\"3\" color=\"black\">"+locat+"</font>";
+}
+
+function use(){
+ switch(locat){
+
+  case "examlever":
+   if(inv === "cane"){
+    s1_lever = true;
+    document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the cane makes a nice, if makeshift, lever.<br>from here, you can control the train.</font><br><button onclick=\"s1_3t()\" onmouseover=\"s1m_move()\" onmouseout=\"m_clear()\">stop train</button>";
+    break;
+   }else
+   { document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\"><</button><font face=\"courier\" size=\"3\" color=\"black\">that makes a pretty shoddy lever.</font>";
+   }break;//if-else
+
+   case "s1_6":
+   if(inv === "colt detective special"){
+    s1_fig = true;
+    document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the shot shocks the silence of the train, and echoes into the distance.</font><br><button onclick=\"stage2()\" >||</button>";
+    break;
+   }else
+   { document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\"><</button><font face=\"courier\" size=\"3\" color=\"black\">that's not a good idea.</font>";
+   }break;//if-else
+
+   case "locked storage car":
+   if(inv === "keys"){
+    s1_5lock = true;
+    document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">a key clicks through the lock, and the door gives way.<br>the only inhabitant of the storage area is a small suitcase.</font><br><button onclick=\"s1_1()\"><</button><button onclick=\"s1_5i()\" onmouseover=\"s1m_suitcase()\" onmouseout=\"m_clear()\">suitcase</button>";
+    break;
+   }else
+   { document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\"><</button><font face=\"courier\" size=\"3\" color=\"black\">that's a lousy way to unlock a door.</font>";
+   }break;//if-else
+
+   case "locker two":
+   if(inv === "multitool"){
+    s2_l2l = true;
+    document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the lock crumbles and the door swings open, revealing its contents. </font><br><button onclick=\"s2_3()\"><</button><button onclick=\"s2_l2()\">| |</button>";
+    break;
+   }else
+   { document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\"><</button><font face=\"courier\" size=\"3\" color=\"black\">that's a lousy way to pick a lock.</font>";
+   }break;//if-else
+   
+   case "locker three":
+   if(inv === "multitool"){
+    s2_l3l = true;
+    document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the lock crumbles and the door swings open, revealing its contents. </font><br><button onclick=\"s2_3()\"><</button><button onclick=\"s2_l3()\">| |</button>";
+    break;
+   }else
+   { document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\"><</button><font face=\"courier\" size=\"3\" color=\"black\">that's a lousy way to pick a lock.</font>";
+   }break;//if-else
+
+   case "generator":
+   if(inv === "cables"){
+   if(s2_power === 1){s2_power = true;}else{s2_power = 1;}
+    document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the cables fit nicely into the generator's outlet.</font><br><button onclick=\"s2_1()\"><</button>";
+    break;
+   }else
+   { document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\"><</button><font face=\"courier\" size=\"3\" color=\"black\">that's not a good idea.</font>";
+   }break;//if-else
+   
+   case "ticket booth":
+   if(inv === "cables"){
+   if(s2_power === 1){s2_power = true;}else{s2_power = 1;}
+    document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the cables fit nicely into the ticket booth's outlet.</font><br><button onclick=\"s2_1()\"><</button>";
+    break;
+   }else
+   { document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\"><</button><font face=\"courier\" size=\"3\" color=\"black\">that's not a good idea.</font>";
+   }break;//if-else
+   
+    case "attic ladder":
+   if(inv === "screwdriver"){
+    p3_1a = "";
+    inv = "ladder";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">you find yourself in the first floor of the house.<br>the second floor of the house could be reached by a ladder</font><br><button onclick =\"s3_1()\"><</button>" + p3_1a;
+ locat = "first residence";
+    break;
+   }else
+   { document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\"><</button><font face=\"courier\" size=\"3\" color=\"black\">the ladder still stands.</font>";
+   }break;//if-else
+
+case "rubble":
+   if(inv === "ladder"){
+    p3_1b = "<button onclick=\"s3_2()\">climb ladder</button>";
+    inv = "your inventory is empty";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the rest of the street is blocked by a pile of rubble.<br>maybe there's something you could use to climb over and to the other side.</font><br><button onclick =\"s3_1()\"><</button>" + p3_1b;
+    break;
+   }else
+   { document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\"><</button><font face=\"courier\" size=\"3\" color=\"black\">that's a lousy way to climb some rubble.</font>";
+   }break;//if-else
+   
+   case "vault door":
+   if(inv === "vault key"){
+    p3_vault = "<button onclick=\"s3_2a2()\">lock box</button>";
+document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">you need a key to open the lock box.</font><br><button onclick =\"s3_1()\"><</button>" + p3_vault;
+    break;
+   }else
+   { document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\"><</button><font face=\"courier\" size=\"3\" color=\"black\">that's a lousy way to open a vault.</font>";
+   }break;//if-else
+
+   case "grave":
+   if(inv === "shovel"){
+    p3_grave = "<button onclick=\"s3_iblowtorch()\">take blowtorch</button>";
+document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the grave.</font><br><button onclick =\"s3_3a1()\">||</button>";
+    break;
+   }else
+   { document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\"><</button><font face=\"courier\" size=\"3\" color=\"black\">there's got to be an easier way to dig something up.</font>";
+   }break;//if-else
+   
+    case "lift panel":
+   if(inv === "elevator key"){
+    p3_liftkey = "<button onclick=\"s3_2c()\">up.</button>";
+document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the elevator doors slide open.</font><br><button onclick =\"s3_2b1()\">controls</button>";
+    break;
+   }else
+   { document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\"><</button><font face=\"courier\" size=\"3\" color=\"black\">that's not a good way to open an elevator.</font>";
+   }break;//if-else
+   
+  case "metro doors":
+   if(inv === "blowtorch"){
+    p3_train = "<button onclick=\"s3_4a()\"><></button>";
+document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the blowtorch melts a hole in the gate.</font><br><button onclick =\"s3_4a()\"><></button>";
+    break;
+   }else
+   { document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\"><</button><font face=\"courier\" size=\"3\" color=\"black\">that's not a good way to open an elevator.</font>";
+   }break;//if-else
+   
+    case "picture frame":
+   if(inv === "picture"){
+    s4_monitorloc = "it is the first metro station you encountered."; 
+    s4_monitor = "<button onclick=\"s4_4()\" onmouseup=\"colour2()\">enter realm</button>"; 
+    s4_display = "a massive chasm tears a hole in one side of the chamber, descending into the darkness.<button onclick =\"s4_2b()\">chasm</button>";
+document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the chamber shakes.</font><br><button onclick =\"s4_2()\">||</button>";
+    break;
+   }else
+   { document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\"><</button><font face=\"courier\" size=\"3\" color=\"black\">that doesn't fit.</font>";
+   }break;//if-else
+   
+   case "chasm":
+   if(inv === "lantern"){
+    s4_monitorloc = "now the screen has moved to show the train, speeding arbitrarily into the distance."; 
+    s4_monitor = "<button onclick=\"s4_5()\" onmouseup=\"colour3()\">enter realm</button>"; 
+    s4_display = "the lantern lands upon the frozen surface of cocytus.<br>its light shines upon a balcony, upon the surface rests a table.<br>";
+document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the lantern tumbles into the chasm.</font><br><button onclick =\"s4_2()\">||</button>";
+    break;
+   }else
+   { document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\"><</button><font face=\"courier\" size=\"3\" color=\"black\">you shouldn't toss that into the pit.</font>";
+   }break;//if-else
+   
+   case "envy":
+   if(inv === "colt detective special. ammo: " + s4_ammo + " bullet(s)" && s4_envydead === ""){
+    s4_ammo -= 2;
+inv ="colt detective special. ammo: " + s4_ammo + " bullet(s)";
+    document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+    s4_envydead = "<button onclick =\"s4_ipoison()\">take poison</button>";
+document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">it took two shots to kill envy.</font><br><button onclick =\"s4_2envy()\">envy</button>";
+    s4_tableprog -= 1;
+    if(s4_tableprog === 0)
+    {document.getElementById('maus').innerHTML = "the monitor should be working again.";
+     s4_cleared = "<button onclick =\"s4_2()\"><</button>";
+    s4_monitor = "<button onclick=\"s4_6()\" onmouseup=\"colour4()\">enter realm</button>"; 
+    }
+    break;
+   }else
+   { document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\"><</button><font face=\"courier\" size=\"3\" color=\"black\">bad idea, dispar.</font>";
+   }break;//if-else
+   
+   case "sloth":
+   if(inv === "colt detective special. ammo: " + s4_ammo + " bullet(s)" && s4_slothdead === ""){
+    s4_ammo -= 2;
+inv = "colt detective special. ammo: " + s4_ammo + " bullet(s)";
+    document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+    s4_slothdead = "<button onclick =\"s4_iknife()\">take knife</button>";
+document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">it took two shots to kill sloth.</font><br><button onclick =\"s4_2sloth()\">sloth</button>";
+    s4_tableprog -= 1;
+    if(s4_tableprog === 0)
+    {document.getElementById('maus').innerHTML = "the monitor should be working again.";
+     s4_cleared = "<button onclick =\"s4_2()\"><</button>";
+    s4_monitor = "<button onclick=\"s4_6()\" onmouseup=\"colour4()\">enter realm</button>"; 
+    }
+    break;
+   }else
+   { document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\"><</button><font face=\"courier\" size=\"3\" color=\"black\">bad idea, dispar.</font>";
+   }break;//if-else
+   
+   case "pride":
+   if(inv === "knife" && s4_pridedead === ""){
+document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the knife is submerged in pride's back.</font><br><button onclick =\"s4_2pride()\">pride</button>";
+    s4_pridedead = "pride has been slain";
+    s4_tableprog -= 1;
+    if(s4_tableprog === 0)
+    {document.getElementById('maus').innerHTML = "the monitor should be working again.";
+     s4_cleared = "<button onclick =\"s4_2()\"><</button>";
+    s4_monitor = "<button onclick=\"s4_6()\" onmouseup=\"colour4()\">enter realm</button>"; 
+    }
+    break;
+   }else
+   { document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\"><</button><font face=\"courier\" size=\"3\" color=\"black\">bad idea, dispar.<br>maybe you should take a cue from sloth</font>";
+   }break;//if-else
+   
+   case "lust":
+   if(inv === "poisoned food" && s4_lustdead === ""){
+document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">lust collapses onto the table.</font><br><button onclick =\"s4_2lust()\">lust</button>";
+    s4_lustdead = "lust has been slain";
+    s4_tableprog -= 1;
+    if(s4_tableprog === 0)
+    {document.getElementById('maus').innerHTML = "the monitor should be working again.";
+     s4_cleared = "<button onclick =\"s4_2()\"><</button>";
+    s4_monitor = "<button onclick=\"s4_6()\" onmouseup=\"colour4()\">enter realm</button>"; 
+    }
+    break;
+   }else
+   { document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\"><</button><font face=\"courier\" size=\"3\" color=\"black\">bad idea, dispar.<br>there's got to be a better way to deal with lust</font>";
+   }break;//if-else
+   
+   case "gluttony":
+   if(inv === "colt detective special. ammo: " + s4_ammo + " bullet(s)" && s4_gluttonydead === ""){
+    s4_ammo -= 1;
+inv = "colt detective special. ammo: " + s4_ammo + " bullet(s)";
+    document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+    s4_gluttonydead = "<button onclick =\"s4_2food()\">plate</button>";
+document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">it took but one shot to kill gluttony.</font><br><button onclick =\"s4_2gluttony()\">gluttony</button>";
+    s4_tableprog -= 1;
+    if(s4_tableprog === 0)
+    {document.getElementById('maus').innerHTML = "the monitor should be working again.";
+     s4_cleared = "<button onclick =\"s4_2()\"><</button>";
+    s4_monitor = "<button onclick=\"s4_6()\" onmouseup=\"colour4()\">enter realm</button>"; 
+    }
+    break;
+   }else
+   { document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\"><</button><font face=\"courier\" size=\"3\" color=\"black\">bad idea, dispar. you need to deal with gluttony before you can poison his food</font>";
+   }break;//if-else
+   
+   case "greed":
+   if(inv === "poisoned food" && s4_greeddead === ""){
+document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">greed collapses onto the table.</font><br><button onclick =\"s4_2greed()\">greed</button>";
+    s4_greeddead = "greed has been slain";
+    s4_tableprog -= 1;
+     if(s4_tableprog === 0)
+    {document.getElementById('maus').innerHTML = "the monitor should be working again.";
+     s4_cleared = "<button onclick =\"s4_2()\"><</button>";
+    s4_monitor = "<button onclick=\"s4_6()\" onmouseup=\"colour4()\">enter realm</button>"; 
+    }
+    break;
+   }else
+   { document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\"><</button><font face=\"courier\" size=\"3\" color=\"black\">bad idea, dispar.<br>there's got to be another way to deal with greed.</font>";
+   }break;//if-else
+   
+   case "food":
+   if(inv === "poison" && s4_fooddead === ""){
+    s4_fooddead = "<button onclick =\"s4_ipoisonedfood()\">take poisoned food</button>";
+document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">you pour the entire bottle of poison into the food.<br>that's got to be enough to knock out anything.</font><br><button onclick =\"s4_2food()\">food</button>";
+    break;
+   }else
+   { document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\"><</button><font face=\"courier\" size=\"3\" color=\"black\">bad idea, dispar.</font>";
+   }break;//if-else
+   
+   case "wrath":
+   if(inv === "colt detective special. ammo: " + s4_ammo + " bullet(s)" && s4_ammo === "litatio's"){
+document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">you have shot me.</font><br><button onclick =\"s4_7()\"> </button>";
+    document.getElementById('pref').innerHTML = "";
+    break;
+   }else
+   { document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\"><</button><font face=\"courier\" size=\"3\" color=\"black\">it takes a very special bullet to kill me, dispar.</font>";
+   }break;//if-else
+
+  default:
+   document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\"><</button><font face=\"courier\" size=\"3\" color=\"black\">that won't work.</font>";
+   break;
+ }//switch
+}//function
+
+//intro----------|
+//â”--â”»â”“
+
+
+ document.getElementById('every').innerHTML = "<br><button onclick=\"intro1()\" onmouseover=\"sm_intro()\" onmouseout=\"m_clear()\">begin</button>";
+ document.body.style.backgroundColor = "#bbb";
+
+
+
+
+//stage1_1- the train--------------------|
+function stage1()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"5\" color=\"black\">welcome to the train.</font><br><button onclick=\"s1_1()\">train</button><button onclick=\"s1_2()\">landscape</button>";
+ locat = "sleeper car";
+ document.getElementById('pref').innerHTML = "<font face=\"courier\" size=\"3\" color=\"black\">below is your preferences bar.<br>use it, for it may prove very useful.<br>if you get stuck, you can check your notes.</font><br><button onclick=\"prefbar()\">preferences</button>";
+ prog += "you find yourself on a train. escape should be your utmost priority. ";
+ minimap = "<font face=\"courier\" size=\"3\" color=\"black\">the train.</font><br><button onclick=\"s1_5()\">storage car</button><button onclick=\"s1_1()\">sleeper car</button><button onclick=\"s1_4()\">diner car</button><button onclick=\"s1_3()\">engine car</button>";
+   document.body.style.backgroundColor = "#555";
+document.getElementById('maus').innerHTML = "";}
+
+function s1_1()//sleeper
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">you find yourself in a darkly lit cabin.<br>under the seats you find a drawer for personal items.<br>no one else is on the train, they won't possibly mind if you search their items.<br></font><br><button onclick=\"s1_5()\"><</button><button onclick=\"s1_2()\" onmouseover=\"s1m_shades()\" onmouseout=\"m_clear()\">open shades</button><button onclick=\"s1_i()\" onmouseover=\"s1m_drawer()\" onmouseout=\"m_clear()\">drawer</button><button onclick=\"s1_4()\">></button>";
+   document.body.style.backgroundColor = "#555";
+locat = "<font face=\"courier\" size=\"3\" color=\"black\">sleeper car</font>";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+ document.getElementById('maus').innerHTML = "";
+}
+
+function s1_2()//landscape
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">you pull back the curtains, revealing the landscape outside.<br>the train speeds past grey sands, devoid of any life.</font><br><button onclick=\"s1_1()\" onmouseover=\"s1m_shades()\" onmouseout=\"m_clear()\">close shades</button>";
+ document.getElementById('maus').innerHTML = "";
+}
+
+function s1_3()//engine
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">strangely, the engine car is devoid of heat.<br>the door to the firebox looms in front of you.<br>a control panel controls the train's speed.</font><br><button onclick=\"s1_4()\"><</button><button onclick=\"s1_3l()\" onmouseover=\"s1m_controls()\" onmouseout=\"m_clear()\">controls</button>";
+locat = "engine car";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+ document.body.style.backgroundColor = "#555";
+}
+
+function s1_3l()//s1_lever
+{document.getElementById('maus').innerHTML = "";
+ if(s1_lever === false)
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">your eyes fall upon the control panel.<br>a lever is needed to change the speed of the train.<br>however, it looks like you could find something to replace it.</font><br><button onclick=\"s1_3()\">^</button>";
+locat = "examlever";
+}//if-else false
+ else{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the train has stopped.<br>it is safe to exit.</font><br><button onclick=\"s1_3()\">^</button>";
+locat = "examlever";
+ }//if-else true
+}
+
+function s1_4()//diner
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the dining car is also devoid of people.<br>a few tables lay scattered about, and a door marked as the exit hides in the shadows of a corner</font><br><button onclick=\"s1_1()\"><</button><button onclick=\"s1_6()\" onmouseover=\"m_door()\" onmouseout=\"m_clear()\">exit</button><button onclick=\"s1_3()\">></button>";
+locat = "<font face=\"courier\" size=\"3\" color=\"black\">diner car</font>";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+ document.body.style.backgroundColor = "#555";
+}
+
+function s1_5()//storage
+{if(s1_5lock === true)
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">a large car was allocated for storage space, but only a singe suitcase sat in the middle of the floor.</font><br><button onclick=\"s1_1()\">></button><button onclick=\"s1_5i()\">suitcase</button>";
+locat = "storage car";
+ document.body.style.backgroundColor = "#555";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+}//if-else true
+ else{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the door is locked.</font><br><button onclick=\"s1_1()\">></button>";
+locat = "locked storage car";
+      document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+ }//if-else false
+}
+
+function s1_5i()//s1_suitcase
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the sole item inside the suitcase is a multitool<br></font><br><button onclick=\"s1_5()\">^</button><button onclick=\"s1_imultitool()\">multitool</button>";
+   document.body.style.backgroundColor = "#856363";
+ document.getElementById('maus').innerHTML = "";
+}
+
+
+function s1_6() //s1_6
+{document.getElementById('maus').innerHTML = "";
+ if(s1_move === false)
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the exit door is locked.<br>besides, it would be harmful to exit the moving train</font><br><button onclick=\"s1_4()\">^</button>";
+}//if-else false
+ else{if(s1_fig === true)
+ {document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the doorway is clear</font><br><button onclick=\"s1_4()\"><</button><button onclick=\"s2_1()\">></button>";}
+ else
+ {document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">a figure blocks the exit door.</font><br><button onclick=\"s1_4()\">^</button>";
+  locat = "s1_6";
+ }//if-else true}
+ }//if else t-t
+ }//function
+
+function s1_i()//s1_drawers
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">you find four items in the cabinet.<br>unfortunately, your pockets can only allow for you to carry one item at a time.<br>you can always switch out the item, but remember to always choose wisely.<br></font><br><button onclick=\"s1_1()\">^</button><button onclick=\"s1_icds()\">colt detective special</button><button onclick=\"s1_ikeys()\">keys</button><button onclick=\"s1_icane()\">cane</button><button onclick=\"s1_iticket()\">ticket</button>";
+   document.body.style.backgroundColor = "#555";
+ document.getElementById('maus').innerHTML = "";
+}
+
+function s1_3t() //stopped train----------|
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">a screech of brakes pulls the train to a stop.<br></font><button onclick=\"s1_4()\">^</button>";
+ s1_move = true;
+prog += " now that the train is stopped, you can probably disembark.";
+document.getElementById('maus').innerHTML = "";
+}
+
+//stage 2- station--------------------|
+function stage2()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"6\" color=\"black\">welcome to the station.</font><br><button onclick=\"s1_4()\"><</button><button onclick=\"s2_2()\">ticket booth</button><button onclick=\"s2_3()\">lockers</button><button onclick=\"s2_4()\">exit stairs</button><button onclick=\"s2_5()\">generator</button>";
+prog += " the train has brought you to the station. maybe the surface has more to offer.";
+document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">preferences</button>";
+ locat = "station platform";
+ minimap = "<font face=\"courier\" size=\"3\" color=\"black\">the station.</font><br><button onclick=\"s1_4()\">train</button><button onclick=\"s2_1()\">station platform</button><button onclick=\"s2_2()\">ticket booth</button><button onclick=\"s2_3()\">lockers</button><button onclick=\"s2_4()\">exit steps</button><button onclick=\"s2_5()\">generator</button>";
+  document.body.style.backgroundColor = "#444";
+ s1_fig = true;
+ s1_lever = true;
+ s1_move = true;
+} 
+
+function s2_1()//station platform
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the ceiling of the station is bathed in shadow </font><br><button onclick=\"s1_4()\"><</button><button onclick=\"s2_2()\">ticket booth</button><button onclick=\"s2_3()\">lockers</button><button onclick=\"s2_4()\">exit stairs</button><button onclick=\"s2_5()\">generator</button>";
+  document.body.style.backgroundColor = "#444";
+ locat = "station platform";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+  document.body.style.backgroundColor = "#444";
+}
+
+function s2_2()//ticket booth
+{locat = "ticket booth";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+ if(s2_power === true)
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the door emits a hiss as it slides open.<br>a barrel of .38 special gunpowder hides under a table.<br>a workbench is in the corner.</font><br><button onclick=\"s2_1()\"><</button><button onclick=\"s2_ipowder()\">gunpowder</button><button onclick=\"s2_b()\">bench</button>";
+}//if true
+else{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">you can't access the ticket booth until an electric current is applied.</font><br><button onclick=\"s2_1()\">^</button>";
+  document.body.style.backgroundColor = "#444";
+}
+}//function
+
+function s2_b()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">this is the workbench.<br>you can probably make something to help you escape here.</font><br><button onclick =\"s2_2()\"><</button><button onclick=\"s2_e()\">>explosive<</button>";
+}
+
+function s2_e()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">you need an arming mechanism, an igniter, the fuel, and something to store it in.</font><br><button onclick=\"s2_b()\"><</button>container: " + s2_ec + "fuel: " +  s2_ef + "igniter: " + s2_ei + "armer: " + s2_ea;
+}
+
+function s2_3()//lockers
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">lockers line the wall.</font><br><button onclick =\"s2_1()\"><</button><button onclick =\"s2_l1()\">1</button><button onclick =\"s2_l2()\">2</button><button onclick =\"s2_l3()\">3</button><button onclick =\"s2_l4()\">4</button><button onclick =\"s2_l5()\">5</button>";
+ locat = "lockers";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+  document.body.style.backgroundColor = "#444";
+}
+
+function s2_4()//exit door
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the exit door is blocked by a mountain of rubble</font><br><button onclick=\"s2_1()\"><</button>" + s2_4p;
+document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+locat = "exit stairs";
+  document.body.style.backgroundColor = "#444";
+}
+//document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the exit door is blocked by a mountain of rubble</font><br><button onclick=\"s2_1()\"><</button>";
+
+function s2_5()//generator
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">a barely audible hum escapes the generator.<br>a small socket is sunken in a ground level.</font><br><button onclick=\"s2_1()\"><</button>";
+document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+locat = "generator";
+  document.body.style.backgroundColor = "#444";
+}
+
+//bench inputs----------|
+function s2_fec()
+{if(inv === "mint box")
+{s2_ec = "mint box, ";
+s2_eprog += 1;
+document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">you need an arming mechanism, an igniter, the fuel, and something to store it in.</font><br><button onclick=\"s2_b()\"><</button>container: " + s2_ec + "fuel: " +  s2_ef + "igniter: " + s2_ei + "armer: " + s2_ea;
+}//if true
+if(s2_eprog == 4)
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">explosive complete.<br>you have: </font><br><button onclick=\"s2_b()\"><</button>container: " + s2_ec + "fuel: " +  s2_ef + "igniter: " + s2_ei + "armer: " + s2_ea + "<button onclick=\"s2_iexplosive()\">explosive</button>";
+
+}//if prog is 4
+}
+
+function s2_fef()
+{if(inv === "gunpowder")
+{s2_ef = "gunpowder, ";
+s2_eprog += 1;
+document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">you need an arming mechanism, an igniter, the fuel, and something to store it in.</font><br><button onclick=\"s2_b()\"><</button>container: " + s2_ec + "fuel: " +  s2_ef + "igniter: " + s2_ei + "armer: " + s2_ea;
+}//if true
+if(s2_eprog == 4)
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">explosive complete.<br>you have: </font><br><button onclick=\"s2_b()\"><</button>container: " + s2_ec + "fuel: " +  s2_ef + "igniter: " + s2_ei + "armer: " + s2_ea + "<button onclick=\"s2_iexplosive()\">explosive</button>";
+}//if prog is 4
+}
+
+function s2_fei()
+{if(inv === "matches")
+{s2_ei = "matches, ";
+s2_eprog += 1;
+document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">you need an arming mechanism, an igniter, the fuel, and something to store it in.</font><br><button onclick=\"s2_b()\"><</button>container: " + s2_ec + "fuel: " +  s2_ef + "igniter: " + s2_ei + "armer: " + s2_ea;
+}//if true
+if(s2_eprog == 4)
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">explosive complete.<br>you have: </font><br><button onclick=\"s2_b()\"><</button>container: " + s2_ec + "fuel: " +  s2_ef + "igniter: " + s2_ei + "armer: " + s2_ea + "<button onclick=\"s2_iexplosive()\">explosive</button>";
+}//if prog is 4
+}
+
+function s2_fea()
+{if(inv === "clock")
+{s2_ea = "alarm clock, ";
+s2_eprog += 1;
+document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">you need an arming mechanism, an igniter, the fuel, and something to store it in.</font><br><button onclick=\"s2_b()\"><</button>container: " + s2_ec + "fuel: " +  s2_ef + "igniter: " + s2_ei + "armer: " + s2_ea;
+}//if true
+if(s2_eprog == 4)
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">explosive complete.<br>you have: </font><br><button onclick=\"s2_b()\"><</button>container: " + s2_ec + "fuel: " +  s2_ef + "igniter: " + s2_ei + "armer: " + s2_ea + "<button onclick=\"s2_iexplosive()\">explosive</button>";
+}//if prog is 4
+}
+
+
+//stage three--------------------|
+function stage3()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"6\" color=\"#444\">subleties</font><br><button onclick=\"s3_1()\">street</button>";
+document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">preferences</button>";
+prog += "having emerged from the street, you find yourself with a new objective. there is another metro station at the end of this street that can take you where you need to go. all you need to do is get there.";
+locat = "first and main";
+  document.body.style.backgroundColor = "#777";
+ inv = "your inventory is empty";
+}
+
+var prog3_p2 = "", prog3_p3 = "", prog3_p4 = "", prog3_p5 = "", p3_1b = "", p3_1a = "<button onclick =\"s3_1a1()\">ladder</button>", p3_vault = "", p3_liftkey = "", p3_grave = "", p3_liftpanel = "", p3_train = "";
+
+function s3_1()//first and main----------|
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">a pile of rubble blocks a small grey house off from the rest of the street.</font><br><button onclick =\"s3_1a()\">small residence</button><button onclick =\"s3_1b()\">rubble</button>";
+ locat = "first and main";
+document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+}
+
+function s3_1a() //first residence
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\"you find yourself in the first floor of the house.<br>a ladder lies below a trapdoor, leading to the second floor</font><br><button onclick =\"s3_1()\"><</button>" + p3_1a;
+ locat = "first residence";
+document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+}
+
+function s3_1a1()//attic ladder
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the ladder.</font><br><button onclick =\"s3_1a()\">v</button><button onclick =\"s3_1a2()\">^</button>";
+ locat = "attic ladder";
+}
+
+function s3_1a2()//attic
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the second floor seems to be a sort of workshop.</font><br><button onclick =\"s3_1a1()\">ladder</button><button onclick =\"s3_1a3()\">cabinet</button>";
+ locat = "attic cabinet";
+}
+
+function s3_1a3()//cabinet
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">There is a screwdriver in the cabinet.</font><br><button onclick =\"s3_1a2()\">^</button><button onclick =\"s3_iscrewdriver()\">take screwdriver</button>";
+}
+
+function s3_1b()//rubble
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the rest of the street is blocked by a pile of rubble.<br>maybe there's something you could use to climb over and to the other side.</font><br><button onclick =\"s3_1()\"><</button>" + p3_1b;
+ locat = "rubble";
+document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+}
+
+function s3_2()//second and main ----------|
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">second and main.<br>the street stretches into the distance.</font><br><button onclick =\"s3_1()\">rubble</button><button onclick =\"s3_2a()\">bank</button><button onclick =\"s3_2b()\">office building</button><button onclick=\"s3_3()\">></button>";
+ locat = "second and main";
+document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+}
+
+function s3_2a()//bank
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the bank lobby stretches before you.</font><br><button onclick =\"s3_2()\">^</button><button onclick =\"s3_2a1()\">vault</button>";
+ locat = "bank";
+document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+}
+
+function s3_2a1()//vault door
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">you need a key to open the vault.</font><br><button onclick =\"s3_2a()\">^</button>" + p3_vault;
+ locat = "vault door";
+document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+}
+
+function s3_2a2()//vault
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">there is another key inside the vault.</font><br><button onclick =\"s3_2a()\">^</button><button onclick =\"s3_iliftkey()\">take elevator key</button>";
+ locat = "vault";
+}
+
+function s3_2b()//office lobby
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">a few potted plants are spotted around the lobbby of the office.<br>but even their leaves are grey.<br>an elevator will take you to the second floor.</font><br><button onclick =\"s3_2()\">^</button><button onclick =\"s3_2b1()\">elevator</button>";
+ locat = "lobby";
+document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+}
+
+function s3_2b1()//elevator panel
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">you can ride the elevator if you can find a key.</font><br><button onclick =\"s3_2b()\">^</button>" + p3_liftkey;
+ locat = "lift panel";
+document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+}
+
+function s3_2c()//offices
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the second floor is filled with offices.<br>a janitorial closet lies at the end of the hall</font><br><button onclick =\"s3_2b()\">v</button><button onclick =\"s3_2c1()\">office</button><button onclick =\"s3_2c1()\">office</button><button onclick =\"s3_2c1()\">office</button><button onclick =\"s3_2c1()\">office</button><button onclick =\"s3_2c2()\">closet</button>";
+ locat = "offices";
+document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+}
+
+function s3_2c1()//office_
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">there's nothing in this office</font><br><button onclick =\"s3_2c()\">^</button>";
+ locat = "office";
+}
+
+function s3_2c2()//janitorial closet
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">there are a few tools in the janitor's closet.</font><br><button onclick =\"s3_2c()\">^</button><button onclick =\"s3_ishovel()\">shovel</button>";
+ locat = "janitorial closet";
+}
+
+function s3_3()//third and main ----------|
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">at the end of the street, a gate blocks a metro entrance off from the rest of the street</font><br><button onclick =\"s3_2()\"><</button><button onclick =\"s3_3a()\">cemetary</button><button onclick =\"s3_3b()\">shack</button><button onclick =\"s3_4()\">v</button>";
+ locat = "third and main";
+document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+prog3_p2 = "<button onclick=\"s3_2()\">second and main</button><button onclick=\"s3_2a()\">bank</button>";
+}
+
+function s3_3a()//cemetary
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">what does one bury in the graves of purgatory?<br>it can't be lost people, this place is full of them.<br>maybe it's lost objects.</font><br><button onclick =\"s3_3()\">^</button><button onclick =\"s3_3a1()\">grave</button>";
+ locat = "cemetary";
+document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+}
+
+function s3_3a1()//grave
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">there's got to be something buried here.</font><br><button onclick =\"s3_3a()\">^</button>" + p3_grave;
+ locat = "grave";
+document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+}
+
+function s3_3b()//shack
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">a small house dwells across from the cemetary.<br>there's not much inside.</font><br><button onclick =\"s3_3()\">^</button><button onclick =\"s3_3b1()\">heirloom box</button>";
+ locat = "shack";
+document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+}
+
+function s3_3b1 ()//heirloom box
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">there's just a vault key in the box.<br>why would they keep it there?</font><br><button onclick =\"s3_3b()\">^</button><button onclick =\"s3_ivaultkey()\">vault key</button>";
+ locat = "shack";
+document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+}
+
+function s3_4()//metro station ----------|
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">a metro station descends into the ground. a gate locks unwanted visitors out.</font><br><button onclick =\"s3_3()\"><</button>" + p3_train;
+ locat = "metro doors";
+document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+}
+
+function s3_4a()//metro 
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">there's only one place for you to go.</font><br><button onclick =\"stage4()\">train.</button>";
+ locat = "metro station";
+document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+}
+
+//stage four--------------------|
+function stage4()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"7\" color=\"#778899\">welcome to the train</font><br><button onclick=\"s4_1a()\"></button>";
+document.getElementById('pref').innerHTML = "";
+locat = "train";
+  document.body.style.backgroundColor = "#333";
+ inv = "your inventory is empty";
+}
+
+//variables
+var s4_monitorloc = "it is the street you just came from.", s4_monitor = "<button onclick=\"s4_3()\" onmouseup=\"colour1()\">enter realm</button>", s4_display = "an empty picture frame hangs solemnly on the wall.<button onclick =\"s4_2a()\">frame</button>", color = "999", color = "999", recaller, s5_conductor = "<br>as you grab the gun, the body of the conductor fades out of existence.<br>but was it really ever there?<br>or was it really something else?", s4_ammo = 5, s4_retrievecds = "", recalling = false;
+
+function colour1()//colours-----|
+{clearInterval(recaller);
+ color = "999";
+ recaller = setInterval(s4_return, 3000);}
+
+function colour2()
+{clearInterval(recaller);
+ color = "999";
+ recaller = setInterval(s4_return, 1500);}
+
+function colour3()
+{clearInterval(recaller);
+ color = "999";
+ recaller = setInterval(s4_return, 2000);}
+
+function colour4()
+{clearInterval(recaller);
+ color = "999";
+ recaller = setInterval(s4_return, 4000);}
+
+function s4_2()//monitor's chamber
+{clearInterval(s4_return);
+ document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">your eyes finally fall upon the monitor, a pillar in the center of the room.<br>facing you is a screen, displaying a place you recognize.<br>" + s4_monitorloc + "<br>there is a button below the screen.<br>you can only cast yourself into a realm for a short time.<br>" + s4_display + "</font><br>" + s4_monitor + s4_retrievecds;
+locat = "monitor's chamber";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">preferences</button>";
+ document.body.style.backgroundColor = "#333";
+}
+
+function s4_return()//recall
+{if(color === 0){document.getElementById('every').innerHTML = "you have been recalled.<br><button onclick =\"s4_2()\">||</button>";
+  document.body.style.backgroundColor = "#777";
+ recaller1 = setInterval(s4_recall, 100);
+ clearInterval(recaller);}
+ color -= 111;
+ document.body.style.backgroundColor = "#" + color;
+}
+
+function s4_recall()//quick recall
+{if(color === 999){
+ clearInterval(recaller1);}
+ color += 111;
+ document.body.style.backgroundColor = "#" + color;
+}
+
+function s4_2a()//frame
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">there's a place to put the photo.</font><br><button onclick=\"s4_2()\"><</button>";
+locat = "picture frame";
+}
+
+function s4_2b()//chasm
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">the chasm is pitch black.</font><br><button onclick=\"s4_2()\"><</button>";
+locat = "chasm";
+}
+
+var s4_cleared = "", s4_otheritem = "", s4_envydead = "", s4_slothdead = "", s4_pridedead = "", s4_lustdead = "", s4_gluttonydead = "", s4_greeddead = "", s4_fooddead = "", s4_wrathdead = "", s4_gluttonypoisoned = "gluttony", s4_tableprog = 6;
+
+function s4_2c()//balcony----------|
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">you find yourself seated at a table.<br>your company consists of seven other men, all very different.</font><br><button onclick=\"s4_2c1()\"><</button><button onclick=\"s4_2envy()\">envy</button><button onclick=\"s4_2sloth()\">sloth</button><button onclick=\"s4_2pride()\">pride</button><button onclick=\"s4_2wrath()\">wrath</button><br>" + s4_otheritem + "<button onclick=\"s4_2lust()\">lust</button><button onclick=\"s4_2gluttony()\">gluttony</button><button onclick=\"s4_2greed()\">greed</button>";
+locat = "table";
+}
+
+function s4_2envy()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">in envy's hands he holds a bottle of poison.</font><br><button onclick=\"s4_2c()\"><</button>" + s4_envydead;
+locat = "envy";
+}
+
+function s4_2sloth()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">sloth holds a knife, but he doesn't look eager to use it.<br>in fact, he doesn't look eager to _do anything at all.</font><br><button onclick=\"s4_2c()\"><</button>" + s4_slothdead;
+locat = "sloth";
+}
+
+function s4_2pride()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">pride sits tall at the table, feeling higher than everyone else.<br>it would almost be too blunt to shoot him.</font><br><button onclick=\"s4_2c()\"><</button>" + s4_pridedead;
+locat = "pride";
+}
+
+function s4_2lust()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">there is an empty plate in front of lust.<br>he might want some food.</font><br><button onclick=\"s4_2c()\"><</button>" + s4_lustdead;
+locat = "lust";
+}
+
+function s4_2gluttony()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">the plate in front of gluttony is filled to the brim with food.<br>he can't possibly eat all of it.<br>if you don't find a use for it, it will surely go to waste.</font><br><button onclick=\"s4_2c()\"><</button>" + s4_gluttonydead;
+locat = "gluttony";
+}
+
+function s4_2greed()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">there is an empty plate in front of greed.<br>he might want some food.</font><br><button onclick=\"s4_2c()\"><</button>" + s4_greeddead;
+locat = "greed";
+}
+
+function s4_2food()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">there is still more than enough food on gluttony's plate</font><br><button onclick=\"s4_2c()\"><</button>" + s4_fooddead;
+locat = "food";
+}
+
+function s4_2wrath()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">wrath sits coolly at the head of the table.<br>his very presence seems to stop the balcony from plummeting into the river cocytus below.<br><br>i am the monitor<br>and I am also wrath.</font><br><button onclick=\"s4_2c()\"><</button>" + s4_wrathdead;
+locat = "wrath";
+}
+
+function s4_2c1()//leaving table
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">you can't leave until the table has been cleared.</font><br>" + s4_cleared + "<button onclick=\"s4_2c()\">></button>";
+ document.getElementById('maus').innerHTML = "";
+}
+
+function s4_3()//<-street->-----|
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">a thick fog obscures most of your surroundings.<br>all you can see is the cemetary, the shack, and the gate of the subway, now locked and whole.</font><br><button onclick =\"s4_3a()\">cemetary</button><button onclick =\"s4_3b()\">shack</button>";
+ locat = "<-third and main->";
+}
+
+function s4_3a()//<-cemetary->
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">a body lies in an upturned grave.</font><br><button onclick=\"s4_3()\"><</button><button onclick=\"s4_3a1()\">[|]</button>";
+locat = "<-cemetary->";
+}
+
+function s4_3a1()//<-wallet->
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">there's some identification in the wallet.<br>a card reads: dispar abelkane.<br><br>this must be you.</font><br><button onclick=\"s4_3a2()\">[o]</button>";
+}
+
+function s4_3a2()//<-wallet->
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">there's something else: a picture.<br>it must be your family.</font><br><button onclick=\"s4_3a1()\"><</button><button onclick=\"s4_ipicture()\">take picture</button>";
+}
+
+function s4_3b()//<-shack->
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">the door is locked.</font><br><button onclick=\"s4_3()\"><</button>";
+locat = "<-shack->";
+}
+
+function s4_4()//<-metro station->-----|
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the fog is just thin enough to obscure the walls of the metro station.<br>the train, however, is missing.</font><br><button onclick =\"s4_4a()\">ticket booth</button><button onclick =\"s4_4b()\">lockers</button>";
+ locat = "<-metro station->";
+}
+
+function s4_4a()//<-ticket booth->
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">the door is locked.</font><br><button onclick=\"s4_4()\"><</button>";
+locat = "<-ticket booth->";
+}
+
+function s4_4b()//<-lockers->
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">one locker hangs open.</font><br><button onclick=\"s4_4()\"><</button><button onclick=\"s4_4b1()\">| |</button>";
+locat = "<-lockers->";
+}
+
+function s4_4b1()//<-lantern->
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">there's just a handheld lantern in here.<br>maybe it could come in handy.</font><br><button onclick=\"s4_4b()\"><</button><button onclick=\"s4_ilantern()\">lantern</button>";
+}
+
+function s4_5()//<-train->-----|
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">you have finally returned to the train.<br>however, this train is darker still.<br>fog obscures all but the fallen body of the conductor, and the revolver that lies beside it.</font><br><button onclick =\"s4_5a()\">conductor</button><button onclick =\"s4_5b()\">colt detective special</button>";
+ locat = "<-train->";
+}
+
+function s4_5a()//<-conductor->
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">as you glance at the conductor, its body fades out of existence.<br>but was it really ever there?<br>or was it really something else?</font><br><button onclick=\"s4_5b()\">colt detective special</button>";
+locat = "<-conductor->";
+ s5_conductor = "";
+}
+
+function s4_5b()//<-colt detective special->
+{recalling = true;
+ document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">the gun is cold to the touch, but then again, it's been a long time since you've used it." + s5_conductor + "</font><br><button onclick=\"s4_icds()\">colt detective special</button>";
+locat = "<-colt detective special->";
+}
+
+function s4_6()//<-sands->-----|
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">you find yourself in a field of sands of grey.<br>if not for the fog, you would certainly be able to see into the distance for near eternity.<br>however, something lies in a depression.</font><br><button onclick =\"s4_6a()\">body</button>";
+ locat = "<-sands->";
+}
+
+function s4_6a()//<-body->-----|
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">the body is such abused by the harsh environment as to be scarcely recognizable.<br>but, it's got an id.</font><br><button onclick =\"s4_6a1()\">identification</button>";
+ locat = "<-body->";
+}
+
+function s4_6a1()//<-identification->-----|
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">there's a name.<br>litatio abelkane.<br><br>this must be your brother.</font><br><button onclick =\"s4_6a2()\">-</button>";
+ locat = "<-identification->";
+}
+
+function s4_6a2()//<-heart->-----|
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">there's something else.<br>nestled in the space where his heart would be, is a .38 special caliber bullet.<br>from a colt detective special.<br>that's your gun.<br><br>you must have killed him.</font><br><button onclick =\"s4_ibullet()\">bullet</button>";
+ locat = "<-heart->";
+}
+
+function s4_1a()//monitor's dialogue----------|
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"7\" color=\"#778899\">have you any idea of who you are?</font><br><button onclick=\"s4_1b()\"></button>";
+}
+
+function s4_1b()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"5\" color=\"#778899\">have you any idea of what your name is?</font><br><button onclick=\"s4_1c()\"></button>";
+}
+
+function s4_1c()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">i know your name.</font><br><button onclick=\"s4_1d()\"></button>";
+}
+
+function s4_1d()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">your name is dispar.</font><br><button onclick=\"s4_1e()\"></button>";
+}
+
+function s4_1e()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">dispar abelkane.</font><br><button onclick=\"s4_1f()\"></button>";
+}
+
+function s4_1f()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">I am the monitor.</font><br><button onclick=\"s4_1g()\"></button>";
+}
+
+function s4_1g()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">and i have been monitoring you.</font><br><button onclick=\"s4_1h()\"></button>";
+}
+
+function s4_1h()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">your journey through life.</font><br><button onclick=\"s4_1i()\"></button>";
+}
+
+function s4_1i()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">and your journey through purgatory.</font><br><button onclick=\"s4_1j()\"></button>";
+}
+
+function s4_1j()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"6\" color=\"#778899\">welcome to my home.</font><br><button onclick=\"s4_2()\"></button>";
+}
+
+function s4_7()//conclusion----------|
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">though you have felt the illusion of power, i have truly been in control.<br>i always have<br>i always will be.</font><br><button onclick=\"s4_7a()\"> </button>";
+}
+
+function s4_7a()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">i was the one keeping us suspended over the waters of cocytus.</font><br><button onclick=\"s4_7b()\"> </button>";
+}
+
+function s4_7b()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">when i die, which i trust will be very soon, you will fall.</font><br><button onclick=\"s4_7c()\"> </button>";
+}
+
+function s4_7c()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">and that will be the end.</font><br><button onclick=\"s4_7d()\"> </button>";
+}
+
+function s4_7d()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">the end of you.<br>the end of me.</font><br><button onclick=\"s4_7e()\"> </button>";
+}
+
+function s4_7e()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">truly a fitting end.<br>to everything.</font><br><button onclick=\"s4_7f()\"> </button>";
+}
+
+function s4_7f()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">goodbye.</font><br><button onclick=\"s4_7g()\"> </button>";
+}
+
+function s4_7g()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"#778899\">goodbye, Dispar.<br><br><br><br>the end.</font><br><button onclick=\"intro1()\">restart</button>";
+}
+
+function s4_8()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"5\" color=\"#778899\">Directed by Zac Farnkopf<br>Programming by Zac Farnkopf.<br>Story by Zac Farnkopf.<br>There will be illustrations and background music made by not me in a future update</font><br><button onclick=\"intro1()\">restart</button><button onclick=\"s4_8()\">credits</button>";
+}
+
+//items--------------------|
+function s1_icds()
+{inv = "colt detective special";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+}
+
+function s1_ikeys()
+{inv = "keys";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+}
+
+function s1_icane()
+{inv = "cane";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+}
+
+function s1_iticket()
+{inv = "ticket";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+}
+
+function s1_imultitool()
+{inv = "multitool";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+}
+
+function s2_isocks()
+{inv = "socks";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+}
+
+function s2_icables()
+{inv = "cables";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+}
+
+function s2_iclock()
+{inv = "clock";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+}
+
+function s2_ibox()
+{inv = "mint box";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+}
+
+function s2_imatches()
+{inv = "matches";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+}
+
+function s2_ipowder()
+{inv = "gunpowder";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+}
+
+function s2_iexplosive()
+{inv = "explosive";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+s2_4p = "<button onclick=\"stage3()\">>clear tunnel<</button>";
+}
+
+function s3_iscrewdriver()
+{inv = "screwdriver";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+}
+
+function s3_ishovel()
+{inv = "shovel";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+}
+
+function s3_ivaultkey()
+{inv = "vault key";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+}
+
+function s3_iliftkey()
+{inv = "elevator key";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+}
+
+function s3_iblowtorch()
+{inv = "blowtorch";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+}
+
+function s4_ipicture()
+{inv = "picture";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+ document.getElementById('every').innerHTML = "you have been recalled.<br><button onclick =\"s4_2()\">||</button>";
+ clearInterval(recaller);
+ recaller1 = setInterval(s4_recall, 100);
+}
+
+function s4_ilantern()
+{inv = "lantern";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+ document.getElementById('every').innerHTML = "you have been recalled.<br><button onclick =\"s4_2()\">||</button>";
+ clearInterval(recaller);
+ recaller1 = setInterval(s4_recall, 100);
+}
+
+function s4_icds()
+{inv = "colt detective special. ammo: " + s4_ammo + " bullet(s)";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+ if(recalling === true){
+ document.getElementById('every').innerHTML = "you have been recalled.<br><button onclick =\"s4_2()\">||</button>";
+ clearInterval(recaller);
+ recaller1 = setInterval(s4_recall, 125);
+ s4_monitor = "";
+ s4_retrievecds = "<button onclick =\"s4_2c()\">balcony</button>";
+ recalling = false;}
+s4_otheritem = "";
+}
+
+function s4_ipoison()
+{inv = "poison";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+s4_otheritem = "<button onclick =\"s4_icds()\">colt detective special</button>";
+}
+
+function s4_iknife()
+{inv = "knife";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+s4_otheritem = "<button onclick =\"s4_icds()\">colt detective special</button>";
+}
+
+function s4_ipoisonedfood()
+{inv = "poisoned food";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+s4_otheritem = "<button onclick =\"s4_icds()\">colt detective special</button>";
+}
+
+function s4_ibullet()
+{inv = "bullet";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefbar()\">^</button> " + inv;
+ document.getElementById('every').innerHTML = "you have been recalled.<br>the bullet fits perfectly into your colt detective special.<br>as if it had been there before.<br><button onclick =\"s4_2()\">||</button>";
+ clearInterval(recaller);
+ recaller1 = setInterval(s4_recall, 200);
+ s4_monitor = "";
+ s4_ammo = "litatio's";
+ inv = "colt detective special. ammo: " + s4_ammo + " bullet(s)";
+s4_otheritem = "";
+}
+
+//lockers--------------------|
+function s2_l1()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">locker one.</font><br><button onclick =\"s2_3()\"><</button><button onclick =\"s2_isocks()\">socks</button>";
+ locat = "locker one";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+}
+
+function s2_l2()
+{locat = "locker two";
+ if(s2_l2l === false)
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">a lock holds the locker door shut.<br>this lock looks weak, maybe you can pick it.</font><br><button onclick =\"s2_3()\"><</button>";
+}//if false
+ else{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">locker two.<br>some cables sit poised inside the grimy locker.<br>you can use these to bring electric current between two objects.</font><br><button onclick =\"s2_3()\"><</button><button onclick =\"s2_icables()\">cables</button>";
+ }//if true
+}
+
+function s2_l3()
+{locat = "locker three";
+ if(s2_l3l === false)
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">a lock holds the locker door shut.<br>this lock looks weak, maybe you can pick it.</font><br><button onclick =\"s2_3()\"><</button>";
+}//if false
+ else{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">locker three.<br>an alarm clock lies on the dirty floor of the locker, dented, but otherwise all right.</font><br><button onclick =\"s2_3()\"><</button><button onclick =\"s2_iclock()\">clock</button>";
+ }//if true
+}
+
+function s2_l4()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">locker four.</font><br><button onclick =\"s2_3()\"><</button><button onclick =\"s2_ibox()\">mint box</button>";
+ locat = "locker four";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+}
+
+function s2_l5()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">locker five.</font><br><button onclick =\"s2_3()\"><</button><button onclick =\"s2_imatches()\">matches</button>";
+ locat = "locker five";
+ document.getElementById('pref').innerHTML = "<button onclick=\"prefdef()\">^</button><button onclick=\"inventory()\">inventory</button><button onclick=\"status()\">notes</button><button onclick=\"map()\">mini-map</button><button onclick=\"use()\">use item</button>";
+}
+
+//mouseover--------------------|
+function m_clear()
+{document.getElementById('maus').innerHTML = "";
+}
+
+function sm_intro()
+{document.getElementById('maus').innerHTML = "intoduction";
+}
+
+function m_intro1()
+{document.getElementById('maus').innerHTML = "begin";
+}
+
+function m_back()
+{document.getElementById('maus').innerHTML = "back";
+}
+
+function s1m_shades()
+{document.getElementById('maus').innerHTML = "open/close window";
+}
+
+function s1m_drawer()
+{document.getElementById('maus').innerHTML = "open drawer";
+}
+
+function s1m_controls()
+{document.getElementById('maus').innerHTML = "examine controls";
+}
+
+function s1m_lever()
+{document.getElementById('maus').innerHTML = "use lever";
+}
+
+function s1m_move()
+{document.getElementById('maus').innerHTML = "stop train";
+}
+
+function s1m_suitcase()
+{document.getElementById('maus').innerHTML = "examine suitcase";
+}
+
+function m_door()
+{document.getElementById('maus').innerHTML = "use door";
+}
+
+//more intro--------------------|
+function intro1(){ document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"10\" color=\"black\">welcome to this new world.</font><br><button onclick=\"intro2()\"></button>";
+ document.body.style.backgroundColor = "#bbb";
+  document.getElementById('maus').innerHTML = "";
+}
+
+
+function intro2()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"9\" color=\"black\">well, not really.</font><br><button onclick=\"intro3()\"></button>";
+  document.body.style.backgroundColor = "#999";
+}
+
+function intro3()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"8\" color=\"black\">this world is not entirely new to you.</font><br><button onclick=\"intro4()\"></button>";
+  document.body.style.backgroundColor = "#888";
+}
+
+function intro4()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"7\" color=\"black\">you have always been nearby, but never truly here.</font><br><button onclick=\"intro5()\"></button>";
+   document.body.style.backgroundColor = "#777";
+}
+
+function intro5()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"6\" color=\"black\">it might look like the world you knew.</font><br><button onclick=\"intro6()\"></button>";
+   document.body.style.backgroundColor = "#666";
+}
+
+function intro6()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"5\" color=\"black\">but it is very, very different.</font><br><button onclick=\"intro7()\"></button>";
+   document.body.style.backgroundColor = "#555";
+}
+
+function intro7()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"5\" color=\"black\">this is the next and possibly final step of your journey.</font><br><button onclick=\"intro8()\"></button>";
+   document.body.style.backgroundColor = "#444";
+}
+
+function intro8()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"4\" color=\"black\">and it is much more dangerous.</font><br><button onclick=\"intro9()\"></button>";
+   document.body.style.backgroundColor = "#333";
+}
+
+function intro9()
+{document.getElementById('every').innerHTML = "<font face=\"courier\" size=\"3\" color=\"black\">welcome to purgatory.</font><br><button onclick=\"stage1()\" onmouseover=\"m_intro1()\" onmouseout=\"m_clear()\">x</button>";
+   document.body.style.backgroundColor = "#222";
+}
  </script>
  
 </body>
